@@ -4,8 +4,6 @@
 #include <errno.h>
 #include <inttypes.h>
 
-int stringToInt();
-
 int main(void) {
     char mesg[] = "Enter a number: ";
     char *endptr;
