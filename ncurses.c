@@ -1,30 +1,34 @@
 #include <ncurses.h>
+#include <stdio.h>
+#include <string.h>
+#include <errno.h>
+#include <inttypes.h>
+
+int stringToInt();
 
 int main(void) {
+    char mesg[] = "Enter a number: ";
+    char *endptr;
     int int1;
     int int2;
     int ans;
+    char str[80];
+    int row, col;               
 
-    initscr();                  /* Start curses mode            */
-    raw();                      /* Line buffering disabled      */
-    keypad(stdscr, TRUE);       /* We get F1, F2 etc..          */
-    noecho();                   /* Don't echo() while we do getch */
+    initscr();                  /* start the curses mode */
+    getmaxyx(stdscr, row, col); /* get the number of rows and columns */
 
-    printw("This program adds two numbers.\nType first number to add\n");
-    //https://stackoverflow.com/questions/66981503/how-to-use-ncurses-to-take-integer-as-a-variable
-    int1 = getch();               /* If raw() hadn't been called
-                                 * we have to press enter before it
-                                 * gets to the program          */
-    printw("Your first number is %d: \n", int1);
-    printw("Type second number to add\n");
-    int2 = getch();
-    ans = int1 + int2;
-    printw("%i + %i = %i", int1, int2, ans);
+    mvprintw(row / 2, (col - (int) strlen(mesg)) / 2, "%s", mesg); /* print the message in Screen centre*/
+    
+    getstr(str);   // take input as a string
 
+    int1 = strtoimax(str, &endptr, 10); // turn inputted string into an int
+    ans = int1 + 10;                    // add inputted int to 10                   
+    
+    mvprintw(row / 2, (col - (int) strlen(mesg)) / 2, "Your number + 10 = %d", ans);
 
-    refresh();                  /* Print it on to the real screen */
-    getch();                    /* Wait for user input */
-    endwin();                   /* End curses mode                */
+    getch();   // wait for next input to end ncurses session
+    endwin();   // end ncurses session
 
     return 0;
 }
